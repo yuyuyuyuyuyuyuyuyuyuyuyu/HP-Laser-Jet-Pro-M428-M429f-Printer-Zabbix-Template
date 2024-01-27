@@ -1,0 +1,213 @@
+# HP MIB (Management Information Base):
+# https://h30434.www3.hp.com/t5/Printers-Knowledge-Base/HP-MIB-Management-Information-Base/ta-p/6888951
+
+# MIB File Downloads
+# https://developers.hp.com/print-management-tools/mib-file-downloads
+
+# HP OID INFO:
+# https://oidref.com/1.3.6.1.4.1.11.2.3.9.1
+# https://oidref.com/1.3.6.1.4.1.11.2.3.9.1.1
+# https://www.oidview.com/mibs/11/HP-LASERJET-COMMON-MIB.html
+
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 5c10e8ea8f6b4775a20041d7471aec54
+      name: Templates/Printers
+  templates:
+    - uuid: 8ca7f964d3d7414f81bc88187c43a2af
+      template: 'HP Laser Jet Printers'
+      name: 'HP Laser Jet Printers'
+      description: |
+        ## Overview HP Printers
+        Автор/Author Omelyusik Yu.Yu.
+        Contact e-mail - omelyusik@bk.ru Вопросы на     - omelyusik@bk.ru
+      groups:
+        - name: Templates/Printers
+      items:
+        - uuid: 988816e1bb7d4f289d14418156fc5e51
+          name: 'Cartridg toner level Measement'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.43.11.1.1.7.1.1
+          key: snmptrap.fallback
+          delay: 3h
+          trends: '0'
+          value_type: CHAR
+          description: |
+            Results
+            
+            1 = other
+            
+            2 = unknown
+            
+            3 = tenThousandthsOfInches
+            
+            4 = micrometers
+            
+            7 = impressions
+            
+            8 = sheets
+            
+            11 = hours
+            
+            12 = thousandthsOfOunces
+            
+            13 = tenthsOfGrams
+            
+            14 = hundrethsOfFluidOunces
+            
+            15 = tenthsOfMilliliters
+            
+            16 = feet
+            
+            17 = meters
+            
+            18 = items
+            
+            19 = percent
+          preprocessing:
+            - type: STR_REPLACE
+              parameters:
+                - '19'
+                - '%'
+            - type: STR_REPLACE
+              parameters:
+                - '1'
+                - other
+            - type: STR_REPLACE
+              parameters:
+                - '2'
+                - unknown
+            - type: STR_REPLACE
+              parameters:
+                - '3'
+                - tenThousandthsOfInches
+            - type: STR_REPLACE
+              parameters:
+                - '4'
+                - micrometers
+            - type: STR_REPLACE
+              parameters:
+                - '7'
+                - impressions
+        - uuid: e83e93607081430aa84f2a28bdd4b023
+          name: CartridgType
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.11.2.3.9.4.2.1.4.1.10.1.1.1.1.0
+          key: YU.LJ.CartridgType.1
+          delay: 24h
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+        - uuid: 36708721e5a747fe8a72932893bbc530
+          name: Device
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.25.3.2.1.3.1
+          key: YU.LJ.Device.3
+          delay: 24h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+        - uuid: b62f82dd227c41b5bac5b81fe22ac191
+          name: 'Device Firmware version'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.11.2.3.9.4.2.1.1.3.6.0
+          key: YU.LJ.firmwareVersion.2
+          delay: 24h
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+        - uuid: ef2aef1d85fc47f492728d6be7de3926
+          name: 'sisUpTime (hrSystemUptime)'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.25.1.1.0
+          key: YU.LJ.hrSystemUptime.3
+          delay: 3h
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+        - uuid: 9fc7e4ec60794f8ca60d08d5fe14bdf3
+          name: 'IP address'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.11.2.4.3.5.2.0
+          key: YU.LJ.IPaddress.4
+          delay: 24h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+        - uuid: 03f934d906254ec2a4455f15f85d0862
+          name: 'IP address GateWay'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.11.2.4.3.5.13.0
+          key: Yu.LJ.IPaddressGateWay.10
+          delay: 3h
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+        - uuid: ea5ce6542fba4ca7bc7f01f41cff2e54
+          name: 'Device Model'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.11.2.4.3.5.44.0
+          key: YU.LJ.model.4
+          delay: 24h
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+        - uuid: 618372a39993466e9144eaa44a57ad5e
+          name: 'Total number of black pages printed by the device'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.11.2.3.9.4.2.1.4.1.2.6.0
+          key: YU.LJ.printed-count.3
+          delay: 1h
+          history: 7d
+          trends: 180d
+        - uuid: 079c01be577d42b6b5a65568b680e455
+          name: 'Device System Name'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.2.1.1.5.0
+          key: YU.LJ.SysName.16
+          delay: 24h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+        - uuid: 6e678b5b1a9e4d26af9d82c8b23135f1
+          name: sysUpTime
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.1.3.0
+          key: YU.LJ.sysUpTime.1
+          delay: 5m
+          history: 7d
+        - uuid: d31b843879c340a8bcf01ac223d2742d
+          name: 'Cartridg current toner level, %'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.43.11.1.1.8.1.1
+          key: YU.LJ.TonerCounter.1
+          delay: 3h
+          history: 30d
+          trends: 180d
+          description: 'Work only whith original cartriges'
+        - uuid: 210c5c9c82ed4829b21363738d47b983
+          name: 'Total number of color pages printed'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.11.2.3.9.4.2.1.4.1.2.7.0
+          key: YU.LJ.total-color-page-count.1
+          delay: 24h
+          history: 7d
+          trends: 180d
+        - uuid: c2a1fbe1a4b041fba594ea34da6be857
+          name: 'Device (ppmPrinterTable)'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.2699.1.2.1.2.1.1.2.1
+          key: YU.LJppmPrinterTable.4
+          delay: 3h
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+        - uuid: 7ced4b08cc2c43b28427302387da16ee
+          name: 'Total number printed by the Device'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.43.10.2.1.4.1.1
+          key: yura.copies.device.1
+          delay: 24h
+          history: 30d
+          trends: 180d
